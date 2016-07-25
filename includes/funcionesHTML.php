@@ -155,9 +155,15 @@ function menuHTML() {
 }
 
 
-function menu($usuario,$titulo,$rol,$torneo) {
+function menu($usuario,$titulo,$rol,$torneo,$admin,$torneos,$reportes) {
 	
-	$sql = "select idmenu,url,icono, nombre, permiso from predio_menu where permiso like '%".$rol."%' order by orden";
+	$sql = "select idmenu,url,icono, nombre, permiso 
+				from predio_menu 
+				where permiso like '%".$rol."%' 
+					  and administracion = ".$admin."
+					  and torneo = ".$torneos."
+					  and reportes = ".$reportes."
+				order by orden";
 	$res = $this->query($sql,0);
 	
 	$cadmenu = "";
@@ -194,6 +200,7 @@ function menu($usuario,$titulo,$rol,$torneo) {
 			
 			<ul class="list-inline">
 				<li><span class="glyphicon glyphicon-user"></span> '.$usuario.'</li>
+				<li><a href="../seccion.php" style="color:#F00;" id="seccionmenu">Secciones </a></li> 
 				<li style="color:#FC0;">'.$torneo.' <a href="../torneos/cambiartorneo.php"> Cambiar</a></li>    
 			</ul>
 		</div>

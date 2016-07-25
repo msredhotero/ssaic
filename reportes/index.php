@@ -25,7 +25,7 @@ $serviciosDatos = new ServiciosDatos();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Dashboard",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Dashboard",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
 
 
 
@@ -150,7 +150,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
 
 <h3>Dashboard</h3>
 
-    <div class="boxInfoLargo tile-stats tile-white stat-tile">
+    <div class="boxInfoLargo">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Fechas</p>
         	
@@ -295,8 +295,6 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
 
 <script type="text/javascript">
 $(document).ready(function(){
-	
-	$('#seccionmenu').attr("href","../seccion.php");
 	
 	$('#buscar').click(function(e) {
         $.ajax({

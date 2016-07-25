@@ -2,7 +2,7 @@
 * {
   margin:0;
   padding:0;
-  font-family: robotoL;
+  font-family: sans-serif;
 }
 html { height : 101%; } 
 body {
@@ -134,7 +134,7 @@ padding-bottom: 10px;
 
 #navigation {
 			height:100%;
-			background-color: #303641;
+			background-color: #436e90;
 			padding-top:15px;
 			overflow-y: auto;
 			position: fixed;
@@ -172,13 +172,13 @@ padding-bottom: 10px;
 		.nav ul li {
 			padding:8px 8px;
 			height:44px;
-			border-bottom:1px solid #3e444e;
-			border-top:1px solid #303641;
+			border-bottom:1px solid #3c6382;
+			/*border-top:1px solid #416886;*/
 			width:100%;
 		}
 		
 		.nav ul li a {
-			color:#FFF;
+			color:#f0f0f0;
 			font-family:robotoL;
 			font-size:1.0em;
 			text-decoration:none;
@@ -188,7 +188,7 @@ padding-bottom: 10px;
 		}
 		
 		.nav ul li:hover {
-			background: #2b303a; /* Old browsers */
+			background: #3c6382; /* Old browsers */
 			text-indent:15px;
 			-webkit-transition:all 1s ease;
 		    -moz-transition:all 1s ease;
@@ -354,7 +354,7 @@ padding-bottom: 10px;
 		.icoamonestados {
 			background:url(../imagenes/iconmenu/user84.png) no-repeat;
 			background-position: center center;
-			width:25px;
+			width:40px;
 			height:40px;
 			float:left;
 			margin-right:10px;
@@ -789,7 +789,7 @@ padding-bottom: 10px;
 	}
 
 	#headBoxInfo {
-		background-color:#303641;
+		background-color:#436e90;
 		padding:6px; 
 		height:36px;
 	}
@@ -829,6 +829,6 @@ padding-bottom: 10px;
 
 @font-face {
   font-family: "robotoL";
-  src: url("../fuentes/Roboto-Bold.ttf");
+  src: url("../fuentes/Roboto-Light.ttf");
 }
 

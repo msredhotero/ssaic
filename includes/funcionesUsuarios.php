@@ -34,7 +34,10 @@ if (mysql_num_rows($respusu) > 0) {
 	
 	
 	$idUsua = mysql_result($respusu,0,0);
-	$sqlpass = "select nombrecompleto,email,usuario,refroll from se_usuarios where password = '".$pass."' and idusuario = ".$idUsua;
+	$sqlpass = "select nombrecompleto,email,usuario,r.descripcion 
+					from se_usuarios s 
+					inner join tbroles r on r.idrol = refroll
+				where password = '".$pass."' and idusuario = ".$idUsua;
 
 
 	$resppass = $this->query($sqlpass,0);

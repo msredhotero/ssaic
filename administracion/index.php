@@ -25,7 +25,7 @@ $serviciosDatos = new ServiciosDatos();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Dashboard",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Administración",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),1,0,0);
 
 
 
@@ -109,7 +109,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-<link href="../css/estiloDash.css" rel="stylesheet" type="text/css">
+<link href="../css/estiloDashAdmin.css" rel="stylesheet" type="text/css">
     
 
     
@@ -144,7 +144,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
 <body>
 
  
-<?php echo str_replace('..','../dashboard',$resMenu); ?>
+<?php echo str_replace('..','../administracion',$resMenu); ?>
 
 <div id="content">
 
