@@ -1,5 +1,6 @@
 <?php
 
+
 session_start();
 
 if (!isset($_SESSION['usua_predio']))
@@ -8,99 +9,54 @@ if (!isset($_SESSION['usua_predio']))
 } else {
 
 
-include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funciones.php');
+include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
-include ('../../includes/funcionesJugadores.php');
 include ('../../includes/funcionesEquipos.php');
-include ('../../includes/funcionesGrupos.php');
-include ('../../includes/funcionesZonasEquipos.php');
 
+$serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
-$serviciosFunciones = new Servicios();
-$serviciosJugadores = new ServiciosJ();
-$serviciosEquipos	= new ServiciosE();
-$serviciosGrupos	= new ServiciosG();
-$serviciosZonasEquipos	= new ServiciosZonasEquipos();
+$serviciosEquipos 	= new ServiciosE();
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(($_SESSION['nombre_predio']),"ZonasEquipos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Equipos",$_SESSION['refroll_predio'],$_SESSION['torneo_predio'],0,1,0);
 
 
 $id = $_GET['id'];
 
-$resResultado = $serviciosZonasEquipos->TraerEquiposZonasPorId($id);
-
-
-$resHorarios = $serviciosFunciones->TraerHorarios($_SESSION['torneo_predio']);
-$resResHor	 = $serviciosFunciones->TraerHorariosId($id);
+$resResultado = $serviciosFunciones->traerHorariosPorIdNuevo($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbtorneoge";
+$tabla 			= "tbhorarios";
 
-$lblCambio	 	= array("refgrupo","refequipo","reftorneo");
-$lblreemplazo	= array("Zonas","Equipos","Torneo");
+$lblCambio	 	= array("reftipotorneo");
+$lblreemplazo	= array("Tipo Torneo");
 
-$resTipoTorneo 	= $serviciosFunciones->TraerTorneosActivo($_SESSION['idtorneo_predio']);
+$resTipoTorneo 	= $serviciosFunciones->traerTipoTorneo();
 
 $cadRef = '';
-$idtorneo = 0;
 while ($rowTT = mysql_fetch_array($resTipoTorneo)) {
-	$idtorneo = $rowTT[0];
-	if (mysql_result($resResultado,0,'reftorneo') == $rowTT[0]) {
-		$cadRef = $cadRef.'<option value="'.$rowTT[0].'" selected>'.utf8_encode($rowTT[1]).'</option>';
+	if (mysql_result($resResultado,0,2) == $rowTT[0]) {
+		$cadRef = $cadRef.'<option value="'.$rowTT[0].'" selected>'.$rowTT[1].'</option>';
 	} else {
-		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
+		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.$rowTT[1].'</option>';	
 	}
 }
 
-
-$resZonas 	= $serviciosGrupos->TraerGrupos();
-
-$cadRef2 = '';
-while ($rowZ = mysql_fetch_array($resZonas)) {
-	if (mysql_result($resResultado,0,'refgrupo') == $rowZ[0]) {
-		$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'" selected>'.utf8_encode($rowZ[1]).'</option>';
-	} else {
-		$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'">'.utf8_encode($rowZ[1]).'</option>';
-	}
-}
-
-
-$resEquipos 	= $serviciosEquipos->TraerEquipos();
-
-$cadRef3 = '';
-while ($rowE = mysql_fetch_array($resEquipos)) {
-	if (mysql_result($resResultado,0,'refequipo') == $rowE[0]) {
-		$cadRef3 = $cadRef3.'<option value="'.$rowE[0].'" selected>'.utf8_encode($rowE[1]).'</option>';
-	} else {
-		$cadRef3 = $cadRef3.'<option value="'.$rowE[0].'">'.utf8_encode($rowE[1]).'</option>';
-	}
-	
-}
-
-$refdescripcion = array(0 => $cadRef2,1=>$cadRef3,2=>$cadRef);
-$refCampo	 	= array("refgrupo","refequipo","reftorneo"); 
+$refdescripcion = array(0 => $cadRef);
+$refCampo[] 	= "reftipotorneo"; 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Zonas</th>
-				<th>Equipos</th>
-				<th>Torneo</th>
-				<th>Prioridad</th>";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
-
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "IdTorneoGE","modificarZonasEquipos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idhorario", "modificarHorarios",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -118,13 +74,13 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 
 
-<title>Gesti贸n: Predio 98</title>
+<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -142,12 +98,8 @@ if ($_SESSION['refroll_predio'] != 1) {
 	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
-
-	<style type="text/css">
-		
-  
-		
-	</style>
+<link rel="stylesheet" href="../../css/bootstrap-timepicker.css">
+    <script src="../../js/bootstrap-timepicker.min.js"></script>
     
    
    <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
@@ -164,67 +116,26 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <body>
 
- 
-<?php echo $resMenu; ?>
+ <?php echo $resMenu; ?>
 
 <div id="content">
 
-<h3>Zonas-Equipos</h3>
+<h3>Horarios</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificaci贸n de Zonas-Equipos</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar de Horarios</p>
         	
         </div>
     	<div class="cuerpoBox">
-        	<div class="row">
         	<form class="form-inline formulario" role="form">
-    		<?php echo $formulario; ?>
-            </div>
-            <br>
-            <hr>
-            <h4>Prioridades de Turnos</h4>
-            <div class="help-block">
-            	* Recuerde que cero 0, significa que no puede jugar en ese horario
-            </div>
-            <div class="row">
-            
-            	<?php
-					$i = 0;
-					while ($rowH = mysql_fetch_array($resHorarios)) {
-					$i = $i + 1;
-
-				?>
-            	<div class="form-group col-md-3">
-                    <label class="control-label" style="text-align:left" for="refgrupo"><?php echo $rowH[1]; ?></label>
-                    <div class="input-group col-md-12">
-                        <select id="horario<?php echo $i; ?>" class="form-control" name="horario<?php echo $i; ?>">
-                            <?php for ($f=0;$f<10;$f++) { ?>
-                            	<?php
-								 		if (mysql_result($resResHor,$i-1,'valor')== $f) {
-								?>
-                                	<option value="<?php echo $f; ?>" selected><?php echo $f; ?></option>
-                                <?php } else { ?>
-                                	<option value="<?php echo $f; ?>"><?php echo $f; ?></option>
-                                <?php }  ?>
-                            <?php } ?>
-                        </select>
-                        <input type="hidden" id="idhorario<?php echo $i; ?>" name="idhorario<?php echo $i; ?>" value="<?php echo $rowH[0]; ?>"/>
-                        <input type="hidden" id="idtp<?php echo $i; ?>" name="idtp<?php echo $i; ?>" value="<?php echo mysql_result($resResHor,$i-1,2); ?>"/>
-                    </div>
-                </div>
-                
-                <?php
-				
-					}
-				
-				?>
-                
-               
-            
+        	
+			<div class="row">
+			<?php echo $formulario; ?>
             </div>
             
-           <div class='row' style="margin-left:25px; margin-right:25px;">
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
                 
                 </div>
@@ -233,7 +144,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                 </div>
             </div>
             
-           <div class="row">
+            <div class="row">
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
@@ -251,36 +162,41 @@ if ($_SESSION['refroll_predio'] != 1) {
             </form>
     	</div>
     </div>
-
-
+    
     
    
 </div>
 
-</div>
-
 
 </div>
 
-
-<div id="dialog2" title="Eliminar Equipo de la Zona">
-    	<p class="alert alert-danger">
+<div id="dialog2" title="Eliminar Equipos">
+    	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            驴Esta seguro que desea eliminar el Equipo de la Zona?.<span id="proveedorEli"></span>
+            縀sta seguro que desea eliminar el Horarios?.<span id="proveedorEli"></span>
         </p>
-
+        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+<script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+$('#timepicker2').timepicker({
+		minuteStep: 15,
+		showSeconds: false,
+		showMeridian: false,
+		defaultTime: false
+		});
+		
+	$('.volver').click(function(event){
+		 
+		url = "index.php";
+		$(location).attr('href',url);
+	});//fin del boton modificar
 	
-	 <?php 
-		echo $serviciosHTML->validacion($tabla);
-	
-	?>
-	
-	 $('.varborrar').click(function(event){
+	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$("#idEliminar").val(usersid);
@@ -290,47 +206,39 @@ $(document).ready(function(){
 			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
 			//$(location).attr('href',url);
 		  } else {
-			alert("Error, vuelva a realizar la acci贸n.");	
+			alert("Error, vuelva a realizar la acci髇.");	
 		  }
 	});//fin del boton eliminar
-	
-	$('.volver').click(function(event){
-		 
-		url = "index.php";
-		$(location).attr('href',url);
-	});//fin del boton modificar
 
 	 $( "#dialog2" ).dialog({
 		 	
 			    autoOpen: false,
 			 	resizable: false,
 				width:600,
-				height:260,
+				height:240,
 				modal: true,
 				buttons: {
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarZonasEquipos'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarHorarios'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
 											
 									},
 									success:  function (response) {
-											
-											$('.'+$('#idEliminar').val()).fadeOut( "slow", function() {
-												$(this).remove();
-											  });
-											
 											url = "index.php";
-											//$(location).attr('href',url);
+											$(location).attr('href',url);
 											
 									}
 							});
 						$( this ).dialog( "close" );
 						$( this ).dialog( "close" );
-							
+							$('html, body').animate({
+	           					scrollTop: '1000px'
+	       					},
+	       					1500);
 				    },
 				    Cancelar: function() {
 						$( this ).dialog( "close" );
@@ -341,15 +249,23 @@ $(document).ready(function(){
 	 		}); //fin del dialogo para eliminar
 	
 	
+	<?php 
+		echo $serviciosHTML->validacion($tabla);
+	
+	?>
+	
+
+	
+	
 	//al enviar el formulario
     $('#cargar').click(function(){
 		
 		if (validador() == "")
         {
-			//informaci贸n del formulario
+			//informaci髇 del formulario
 			var formData = new FormData($(".formulario")[0]);
 			var message = "";
-			//hacemos la petici贸n ajax  
+			//hacemos la petici髇 ajax  
 			$.ajax({
 				url: '../../ajax/ajax.php',  
 				type: 'POST',
@@ -371,15 +287,16 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Equipo a la Zona</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Horarios</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
-												  despu茅s de los 2 segundos de retraso*/
-												$(this).dequeue(); //contin煤o con el siguiente 铆tem en la cola
+												  despu閟 de los 2 segundos de retraso*/
+												$(this).dequeue(); //contin鷒 con el siguiente 韙em en la cola
 												
 											});
 											$("#load").html('');
-											
+											//url = "index.php";
+											//$(location).attr('href',url);
                                             
 											
                                         } else {

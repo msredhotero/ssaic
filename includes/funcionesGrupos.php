@@ -10,7 +10,7 @@ date_default_timezone_set('America/Buenos_Aires');
 class ServiciosG {
 	
 	function TraerGrupos() {
-		$sql = "select * from dbgrupos order by idgrupo limit 5";
+		$sql = "select * from dbgrupos order by idgrupo";
 		return $this-> query($sql,0);
 	}
 	

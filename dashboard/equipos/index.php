@@ -22,7 +22,7 @@ $serviciosEquipos 	= new ServiciosE();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(($_SESSION['nombre_predio']),"Equipos",$_SESSION['refroll_predio'],($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu(($_SESSION['nombre_predio']),"Equipos",$_SESSION['refroll_predio'],($_SESSION['torneo_predio']),0,1,0);
 
 
 

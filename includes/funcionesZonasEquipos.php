@@ -274,7 +274,7 @@ class ServiciosZonasEquipos {
 			//return $sql;
 			
 }
-	
+	/*
 	function TraerTodoFixture() {
 		$sql = "select 
 			fi.idfixture,
@@ -371,9 +371,191 @@ class ServiciosZonasEquipos {
 							
 							where tp.idtipotorneo = ".$_SESSION['idtorneo_predio']."
 							
-					 order by g.nombre,f.tipofecha,fi.hora";
+					 order by fi.reffecha";
 		 return $this-> query($sql,0);
+		 //return $sql;
 	}
+	*/
+	
+	function TraerTodoFixture() {
+		$sql = "
+			select
+		*
+		from(
+		select 
+			fi.idfixture,
+			(select e.nombre 
+			        from dbtorneoge tge
+			        inner 
+			        join dbtorneos t
+			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        inner 
+			        join dbequipos e
+			        on e.idequipo = tge.refequipo
+			        inner 
+			        join dbgrupos g
+			        on g.idgrupo = tge.refgrupo
+			        where tge.idtorneoge = fi.reftorneoge_a) as equipoa,
+					(case when fi.resultado_a is null then (select
+												(case when sum(gg.goles) is null then (case when fi.chequeado = 1 then 0 else null end) else sum(gg.goles) end)
+												from		tbgoleadores gg
+												where gg.reffixture = fi.idfixture and gg.refequipo = (select tge.refequipo 
+																										from dbtorneoge tge
+																										inner 
+																										join dbtorneos t
+																										on tge.reftorneo = t.idtorneo and t.activo = true
+																										inner 
+																										join dbequipos e
+																										on e.idequipo = tge.refequipo
+																										inner 
+																										join dbgrupos g
+																										on g.idgrupo = tge.refgrupo
+																										where tge.idtorneoge = fi.reftorneoge_a))
+				else fi.resultado_a end) as resultadoa,
+					(case when fi.resultado_b is null then (select
+															(case when sum(gg.goles) is null then (case when fi.chequeado = 1 then 0 else null end) else sum(gg.goles) end)
+															from		tbgoleadores gg
+															where gg.reffixture = fi.idfixture and gg.refequipo = (select tge.refequipo 
+						from dbtorneoge tge
+						inner 
+						join dbtorneos t
+						on tge.reftorneo = t.idtorneo and t.activo = true
+						inner 
+						join dbequipos e
+						on e.idequipo = tge.refequipo
+						inner 
+						join dbgrupos g
+						on g.idgrupo = tge.refgrupo
+						where tge.idtorneoge = fi.reftorneoge_b))
+							else fi.resultado_b end) as resultadob,
+			(select e.nombre 
+			        from dbtorneoge tge
+			        inner 
+			        join dbtorneos t
+			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        inner 
+			        join dbequipos e
+			        on e.idequipo = tge.refequipo
+			        inner 
+			        join dbgrupos g
+			        on g.idgrupo = tge.refgrupo
+			        where tge.idtorneoge = fi.reftorneoge_b) as equipob,
+			
+			(select g.nombre
+			        from dbtorneoge tge
+			        inner 
+			        join dbtorneos t
+			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        inner 
+			        join dbequipos e
+			        on e.idequipo = tge.refequipo
+			        inner 
+			        join dbgrupos g
+			        on g.idgrupo = tge.refgrupo
+			        where tge.idtorneoge = fi.reftorneoge_b) as zona,   
+			fi.fechajuego,
+			f.tipofecha as fecha,
+			fi.hora,
+			(case when fi.chequeado = 1 
+					then '1' 
+					else '0' 
+					end
+					) as chequeado,
+			g.nombre,
+				f.idfecha
+					from dbfixture as fi
+					        inner 
+					        join tbfechas AS f
+					        on fi.reffecha = f.idfecha
+					        inner 
+					        join dbtorneoge tge
+					        on tge.idtorneoge = fi.reftorneoge_b
+					        inner 
+					        join dbtorneos t
+					        on tge.reftorneo = t.idtorneo and t.activo = true
+							inner
+							join		tbtipotorneo tp
+							on			tp.idtipotorneo = t.reftipotorneo
+					        inner 
+					        join dbgrupos g
+					        on g.idgrupo = tge.refgrupo
+							
+							where tp.idtipotorneo = ".$_SESSION['idtorneo_predio']."
+				union all
+					select 
+				fi.idfixture,
+				(select 
+						e.nombre
+					from
+						dbtorneoge tge
+							inner join
+						dbtorneos t ON tge.reftorneo = t.idtorneo
+							and t.activo = true
+							inner join
+						dbequipos e ON e.idequipo = tge.refequipo
+							inner join
+						dbgrupos g ON g.idgrupo = tge.refgrupo
+					where
+						tge.idtorneoge = fi.reftorneoge_a) as equipoa,
+				null as resultadoa,
+				null as resultadob,
+				(select 
+						e.nombre
+					from
+						dbtorneoge tge
+							inner join
+						dbtorneos t ON tge.reftorneo = t.idtorneo
+							and t.activo = true
+							inner join
+						dbequipos e ON e.idequipo = tge.refequipo
+							inner join
+						dbgrupos g ON g.idgrupo = tge.refgrupo
+					where
+						tge.idtorneoge = fi.reftorneoge_b) as equipob,
+				(select 
+						g.nombre
+					from
+						dbtorneoge tge
+							inner join
+						dbtorneos t ON tge.reftorneo = t.idtorneo
+							and t.activo = true
+							inner join
+						dbequipos e ON e.idequipo = tge.refequipo
+							inner join
+						dbgrupos g ON g.idgrupo = tge.refgrupo
+					where
+						(tge.idtorneoge = fi.reftorneoge_b and fi.reftorneoge_a = 0) or (tge.idtorneoge = fi.reftorneoge_a and fi.reftorneoge_b = 0)) as zona,
+				fi.fechajuego,
+				f.tipofecha as fecha,
+				fi.hora,
+				(case
+					when fi.chequeado = 1 then '1'
+					else '0'
+				end) as chequeado,
+				g.nombre,
+				f.idfecha
+			from
+				dbfixture as fi
+					inner join
+				tbfechas AS f ON fi.reffecha = f.idfecha
+					inner join
+				dbtorneoge tge ON (tge.idtorneoge = fi.reftorneoge_b and fi.reftorneoge_a = 0) or (tge.idtorneoge = fi.reftorneoge_a and fi.reftorneoge_b = 0)
+					inner join
+				dbtorneos t ON tge.reftorneo = t.idtorneo
+					and t.activo = true
+					inner join
+				tbtipotorneo tp ON tp.idtipotorneo = t.reftipotorneo
+					inner join
+				dbgrupos g ON g.idgrupo = tge.refgrupo
+			where
+				tp.idtipotorneo =  ".$_SESSION['idtorneo_predio']."
+				) ff		
+			group by ff.idfixture,ff.equipoa,ff.resultadoa,ff.resultadob,ff.equipob,ff.zona,ff.fechajuego,ff.fecha,ff.hora,ff.chequeado,ff.nombre,ff.idfecha	
+					 order by ff.nombre,ff.idfecha,ff.fecha,ff.hora, ff.idfixture";
+		 return $this-> query($sql,0);
+		 // agrupo porque me duplica, mirarlo
+	}
+	
 	
 	function TraerTodoFixturePorFecha($reffecha) {
 		$sql = "select 
@@ -888,7 +1070,6 @@ class ServiciosZonasEquipos {
 		return $this->query($sql,0);
 	}
 	
-	
 	function TraerEquiposZonasPorZonas($idzona) {
 		$sql  = "select 
 			tge.idtorneoge, g.nombre, e.nombre, t.nombre, tge.prioridad
@@ -903,10 +1084,11 @@ class ServiciosZonasEquipos {
 			inner
 							join		tbtipotorneo tp
 							on			tp.idtipotorneo = t.reftipotorneo
-			where tp.descripciontorneo = '".$_SESSION['torneo_predio']."' and t.activo = 1 and tge.refgrupo = ".$idzona."
+			where tp.idtipotorneo = ".$_SESSION['idtorneo_predio']." and t.activo = 1 and tge.refgrupo = ".$idzona."
 			order by g.nombre, e.nombre";
 		return $this->query($sql,0);
 	}
+	
 	
 	function TraerZonaPorTorneoEquipo($idEquipo) {
 		$sql  = "select g.idgrupo, g.nombre,tp.idtipotorneo

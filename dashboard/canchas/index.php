@@ -1,5 +1,6 @@
 <?php
 
+
 session_start();
 
 if (!isset($_SESSION['usua_predio']))
@@ -11,61 +12,47 @@ if (!isset($_SESSION['usua_predio']))
 include ('../../includes/funciones.php');
 include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
+include ('../../includes/funcionesEquipos.php');
 
 $serviciosFunciones = new Servicios();
-$serviciosUsuario = new ServiciosUsuarios();
-$serviciosHTML = new ServiciosHTML();
+$serviciosUsuario 	= new ServiciosUsuarios();
+$serviciosHTML 		= new ServiciosHTML();
+$serviciosEquipos 	= new ServiciosE();
 
 $fecha = date('Y-m-d');
 
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Torneos",$_SESSION['refroll_predio'],($_SESSION['torneo_predio']),0,1,0);
+//$resProductos = $serviciosProductos->traerProductosLimite(6);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Canchas",$_SESSION['refroll_predio'],$_SESSION['torneo_predio'],0,1,0);
 
-
-/////////////////////// Opciones de la pagina  ////////////////////
-
-$lblTitulosingular	= "Torneo";
-$lblTituloplural	= "Torneos";
-$lblEliminarObs		= "Si elimina el torneo se eliminara todo el contenido de este";
-$accionEliminar		= "eliminarTorneo";
-
-/////////////////////// Fin de las opciones /////////////////////
 
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbtorneos";
+$tabla 			= "tbcanchas";
 
-$lblCambio	 	= array("reftipotorneo","FechaCreacion");
-$lblreemplazo	= array("Tipo Torneo","Fecha Creaci贸n");
-
-$resTipoTorneo 	= $serviciosFunciones->traerTipoTorneo();
+$lblCambio[]	 	= "";
+$lblreemplazo[]	= "";
 
 $cadRef = '';
-while ($rowTT = mysql_fetch_array($resTipoTorneo)) {
-	$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
-	
-}
+
 
 $refdescripcion = array(0 => $cadRef);
-$refCampo[] 	= "reftipotorneo"; 
+$refCampo[] 	= ""; 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Nombre</th>
-				<th>Fecha Creaci贸n</th>
-				<th>Activo</th>
-				<th>Tipo Torneo</th>";
+$cabeceras 		= "	<th>Canchas</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
-$formulario 	= $serviciosFunciones->camposTabla("insertarTorneo",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTabla("insertarCanchas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFunciones->TraerTorneos(),4);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFunciones->TraerCanchas(),1);
 
 
 
@@ -84,36 +71,33 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 
 
-<title>Gesti贸n: Predio 98</title>
+<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
 <link href="../../css/estiloDash.css" rel="stylesheet" type="text/css">
     
 
+    
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-
     <link rel="stylesheet" href="../../css/jquery-ui.css">
 
     <script src="../../js/jquery-ui.js"></script>
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="../../bootstrap/css/bootstrap-theme.min.css">
-
-    <link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+    
+	<!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css"/>
+	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
-    
-
+	<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="../../css/bootstrap-timepicker.css">
+    <script src="../../js/bootstrap-timepicker.min.js"></script>
     
    
    <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
@@ -130,26 +114,24 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <body>
 
-
- 
-<?php echo $resMenu; ?>
+ <?php echo $resMenu; ?>
 
 <div id="content">
 
-<h3><?php echo $lblTituloplural; ?></h3>
+<h3>Canchas</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Carga de <?php echo $lblTituloplural; ?></p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Canchas</p>
         	
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
-        	<?php echo $formulario; ?>
+        	<div class="row">
+			<?php echo $formulario; ?>
+            </div>
             
-            
-            
-            <div class='row'>
+            <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
                 
                 </div>
@@ -157,7 +139,6 @@ if ($_SESSION['refroll_predio'] != 1) {
                 
                 </div>
             </div>
-			
             
             <div class="row">
                 <div class="col-md-12">
@@ -174,13 +155,14 @@ if ($_SESSION['refroll_predio'] != 1) {
     
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;"><?php echo $lblTituloplural; ?> Cargados</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Canchas Cargadas</p>
         	
         </div>
     	<div class="cuerpoBox">
         	<?php echo $lstCargados; ?>
     	</div>
     </div>
+    
     
 
     
@@ -190,24 +172,58 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 </div>
-
-
-<div id="dialog2" title="Eliminar <?php echo $lblTitulosingular; ?>">
+<div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            驴Esta seguro que desea eliminar el <?php echo $lblTitulosingular; ?>?.<span id="proveedorEli"></span>
+            縀sta seguro que desea eliminar la Canchas?.<span id="proveedorEli"></span>
         </p>
-        <p><strong>Importante: </strong><?php echo $lblEliminarObs; ?></p>
+        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+<script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
+
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
 <script src="../../js/bootstrap-datetimepicker.es.js"></script>
 
-
 <script type="text/javascript">
+
 $(document).ready(function(){
+	$('#timepicker2').timepicker({
+		minuteStep: 15,
+		showSeconds: false,
+		showMeridian: false,
+		defaultTime: false
+		});
+		
+	$('#example').dataTable({
+		"order": [[ 0, "asc" ]],
+		"language": {
+			"emptyTable":     "No hay datos cargados",
+			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
+			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
+			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
+			"infoPostFix":    "",
+			"thousands":      ",",
+			"lengthMenu":     "Mostrar _MENU_ filas",
+			"loadingRecords": "Cargando...",
+			"processing":     "Procesando...",
+			"search":         "Buscar:",
+			"zeroRecords":    "No se encontraron resultados",
+			"paginate": {
+				"first":      "Primero",
+				"last":       "Ultimo",
+				"next":       "Siguiente",
+				"previous":   "Anterior"
+			},
+			"aria": {
+				"sortAscending":  ": activate to sort column ascending",
+				"sortDescending": ": activate to sort column descending"
+			}
+		  }
+	} );
 	
-	 $('.varborrar').click(function(event){
+		$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$("#idEliminar").val(usersid);
@@ -217,17 +233,18 @@ $(document).ready(function(){
 			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
 			//$(location).attr('href',url);
 		  } else {
-			alert("Error, vuelva a realizar la acci贸n.");	
+			alert("Error, vuelva a realizar la acci髇.");	
 		  }
 	});//fin del boton eliminar
 	
-	$('.varmodificar').click(function(event){
+	$("#example").on("click",'.varmodificar', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
+			
 			url = "modificar.php?id=" + usersid;
 			$(location).attr('href',url);
 		  } else {
-			alert("Error, vuelva a realizar la acci贸n.");	
+			alert("Error, vuelva a realizar la acci髇.");	
 		  }
 	});//fin del boton modificar
 
@@ -242,7 +259,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: '<?php echo $accionEliminar; ?>'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarCanchas'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -268,22 +285,24 @@ $(document).ready(function(){
 		 
 		 
 	 		}); //fin del dialogo para eliminar
-	
-	
+			
 	<?php 
 		echo $serviciosHTML->validacion($tabla);
 	
 	?>
+	
+
+	
 	
 	//al enviar el formulario
     $('#cargar').click(function(){
 		
 		if (validador() == "")
         {
-			//informaci贸n del formulario
+			//informaci髇 del formulario
 			var formData = new FormData($(".formulario")[0]);
 			var message = "";
-			//hacemos la petici贸n ajax  
+			//hacemos la petici髇 ajax  
 			$.ajax({
 				url: '../../ajax/ajax.php',  
 				type: 'POST',
@@ -305,11 +324,11 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong><?php echo $lblTitulosingular; ?></strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente la <strong>Cancha</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
-												  despu茅s de los 2 segundos de retraso*/
-												$(this).dequeue(); //contin煤o con el siguiente 铆tem en la cola
+												  despu閟 de los 2 segundos de retraso*/
+												$(this).dequeue(); //contin鷒 con el siguiente 韙em en la cola
 												
 											});
 											$("#load").html('');
@@ -335,7 +354,6 @@ $(document).ready(function(){
 
 });
 </script>
-
 <script type="text/javascript">
 $('.form_date').datetimepicker({
 	language:  'es',
@@ -349,8 +367,6 @@ $('.form_date').datetimepicker({
 	format: 'dd/mm/yyyy'
 });
 </script>
-
-
 <?php } ?>
 </body>
 </html>

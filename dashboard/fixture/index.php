@@ -29,7 +29,7 @@ $serviciosDatos		= new ServiciosDatos();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Fixture",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Fixture",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
 
 
 
@@ -100,7 +100,7 @@ $cabeceras 		= "	<th>Equipo 1</th>
 
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarFixture",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
-
+//die($serviciosZonasEquipos->TraerTodoFixture());
 $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),9);
 
 $resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_predio']);
@@ -213,6 +213,9 @@ $resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_pred
                     	<a href="generarfixture.php?idtorneo=<?php echo $row[2]; ?>&idzona=<?php echo $row[0]; ?>"><button type="button" class="btn btn-primary" style="margin-left:0px;"><?php echo $row[1]; ?> Generar Fixture</button></a>
                     </li>
 					<?php } ?>
+                    <li>
+                        <button type="button" class="btn btn-primary" id="fixtureM" style="margin-left:0px;">Fixture Manual</button>
+                    </li>
                 </ul>
             </div>
             <hr>
@@ -305,11 +308,41 @@ $resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_pred
 
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
 <script src="../../js/bootstrap-datetimepicker.es.js"></script>
-
+<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+<script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 
 
 <script type="text/javascript">
 $(document).ready(function(){
+	
+	$('#example').dataTable({
+		"order": [[ 7, "desc" ]],
+		"language": {
+			"emptyTable":     "No hay datos cargados",
+			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
+			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
+			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
+			"infoPostFix":    "",
+			"thousands":      ",",
+			"lengthMenu":     "Mostrar _MENU_ filas",
+			"loadingRecords": "Cargando...",
+			"processing":     "Procesando...",
+			"search":         "Buscar:",
+			"zeroRecords":    "No se encontraron resultados",
+			"paginate": {
+				"first":      "Primero",
+				"last":       "Ultimo",
+				"next":       "Siguiente",
+				"previous":   "Anterior"
+			},
+			"aria": {
+				"sortAscending":  ": activate to sort column ascending",
+				"sortDescending": ": activate to sort column descending"
+			}
+		  }
+	} );
+	
+	
 	$('#timepicker2').timepicker({
 		minuteStep: 15,
 		showSeconds: false,
@@ -320,6 +353,11 @@ $(document).ready(function(){
 		echo $serviciosHTML->validacion($tabla);
 	
 	?>
+	
+	$('#fixtureM').click( function() {
+		url = "fixturemanual.php";
+		$(location).attr('href',url);
+	});
 	
 	$('#chequearF').click( function() {
 		url = "chequear.php";
@@ -477,13 +515,14 @@ $(document).ready(function(){
 											//url = "index.php";
 											var a = $('#reftorneoge_a option:selected').html();
 											var b = $('#reftorneoge_b option:selected').html();
+											/*alert(b);*/
 											a = a.split(' - ');
 											b = b.split(' - ');
 											
 											$('#resultados').prepend('<tr><td>' + a[1] + '</td><td></td><td></td><td>' + 
-																		+ b[1] + '</td><td>' + 
+																		b[1] + '</td><td>' + 
 																		a[0] + '</td><td>' + 
-																		$('#fechajuego option:selected').html() + '</td><td>' + 
+																		$('#fechajuego').html() + '</td><td>' + 
 																		$('#reffecha option:selected').html() + '</td><td>' + 
 																		$('#hora option:selected').html() + '</td><td style="color:#f00;">Nuevo</td></tr>').fadeIn(300);
 											

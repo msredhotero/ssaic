@@ -18,7 +18,7 @@ $serviciosHTML = new ServiciosHTML();
 
 $fecha = date('Y-m-d');
 
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Torneos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Torneos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
 
 
 $id = $_GET['id'];
@@ -173,9 +173,6 @@ if ($_SESSION['refroll_predio'] != 1) {
                     </li>
                     <li>
                         <button type="button" class="btn btn-danger varborrar" id="<?php echo $id; ?>" style="margin-left:0px;">Eliminar</button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-danger varhistorial" id="<?php echo $id; ?>" style="margin-left:0px;">Pasar al Historial</button>
                     </li>
                     <li>
                         <button type="button" class="btn btn-default volver" style="margin-left:0px;">Volver</button>

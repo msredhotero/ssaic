@@ -24,7 +24,7 @@ $serviciosZonasEquipos 	= new ServiciosZonasEquipos();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Fixture",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Fixture",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
 
 
 $id = $_GET['id'];
@@ -84,7 +84,7 @@ while ($rowC = mysql_fetch_array($resCanchas)) {
 }
 
 
-$resHorarios 	= $serviciosFunciones->TraerHorarios($_SESSION['torneo_predio']);
+$resHorarios 	= $serviciosFunciones->TraerHorarios($_SESSION['idtorneo_predio']);
 
 $cadRef4 = '';
 while ($rowH = mysql_fetch_array($resHorarios)) {

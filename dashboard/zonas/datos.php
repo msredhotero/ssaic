@@ -29,7 +29,7 @@ $serviciosEquipos = new ServiciosE();
 
 $fecha = date('Y-m-d');
 
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Zonas",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Zonas",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
 
 $res = $serviciosJugadores->TraerJugadores();
 

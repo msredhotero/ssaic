@@ -18,6 +18,28 @@ class Servicios {
 		
 	}
 	
+	
+	function traerLetras() {
+		$sql = "SELECT * FROM tbletras order by letra";
+		$res 	=	$this->query($sql,0);
+		
+		return $res;
+	}
+	
+	function modificarLetra($letra,$id) {
+		$sql = "update tbletras set id =".$id." where idletra = ".$letra;
+		$res 	=	$this->query($sql,0);
+		
+		return $res;	
+	}
+	
+	function modificarTodasLetra() {
+		$sql = "update tbletras set id =null";
+		$res 	=	$this->query($sql,0);
+		
+		return $res;	
+	}
+	
 	function traerTipoTorneoActivo() {
 		$sql = "SELECT idtipotorneo,descripciontorneo FROM tbtipotorneo where activo = 1 order by descripciontorneo";
 		$res 	=	$this->query($sql,0);
@@ -1082,7 +1104,7 @@ function traerZonaPorTorneos($refTorneo) {
 	function TraerHorarios($tipotorneo) {
 		$sql = "select t.idhorario, t.horario from tbhorarios t 
 				inner join tbtipotorneo tp on t.reftipotorneo = tp.idtipotorneo 
-				where tp.descripciontorneo = '".$tipotorneo."'";
+				where tp.idtipotorneo = '".$tipotorneo."'";
 		return $this-> query($sql,0);
 	}
 	

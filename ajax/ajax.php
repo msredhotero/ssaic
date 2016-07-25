@@ -2431,11 +2431,6 @@ function insertarZonasEquipos($serviciosZonasEquipos) {
 	
 	$res = $serviciosZonasEquipos->insertarZonasEquipos($refgrupo,$reftorneo,$refequipo,$prioridad);
 	if ((integer)$res > 0) {
-		
-		for ($i=1;$i<=4;$i++) {
-			$serviciosZonasEquipos->insertarHorariosEquiposPrioridades($res,$_POST['idhorario'.$i],$_POST['horario'.$i]);
-		}
-		
 		echo '';
 	} else {
 		echo 'Huvo un error al insertar datos';

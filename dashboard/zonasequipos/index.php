@@ -29,7 +29,7 @@ $serviciosDatos	= new ServiciosDatos();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(($_SESSION['nombre_predio']),"ZonasEquipos",$_SESSION['refroll_predio'],($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu(($_SESSION['nombre_predio']),"ZonasEquipos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
 
 
 
@@ -204,46 +204,9 @@ if ($_SESSION['refroll_predio'] != 1) {
             </div>
             <br>
             <hr>
-            <h4>Prioridades de Turnos</h4>
-            <div class="help-block">
-            	* Recuerde que cero 0, significa que no puede jugar en ese horario
-            </div>
-            <div class="row">
-            
-            	<?php
-					$i = 0;
-					while ($rowH = mysql_fetch_array($resHorarios)) {
-					$i = $i + 1;
-
-				?>
-            	<div class="form-group col-md-3">
-                    <label class="control-label" style="text-align:left" for="refgrupo"><?php echo $rowH[1]; ?></label>
-                    <div class="input-group col-md-12">
-                        <select id="horario<?php echo $i; ?>" class="form-control" name="horario<?php echo $i; ?>">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="0">0</option>
-                            
-                        </select>
-                        <input type="hidden" id="idhorario<?php echo $i; ?>" name="idhorario<?php echo $i; ?>" value="<?php echo $rowH[0]; ?>"/>
-                    </div>
-                </div>
-                
-                <?php
-				
-					}
-				
-				?>
-                
-               
-            
+            <div class="row" style="margin-left:25px; margin-right:25px;">
+            <div class="alert"> </div>
+            <div id="load"> </div>
             </div>
             
             
@@ -307,7 +270,9 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-	
+	 
+	 $('#prioridad').attr("value",0);
+	 $('#activo').prop("checked", "checked");
 	 <?php 
 		echo $serviciosHTML->validacion($tabla);
 	
@@ -395,7 +360,7 @@ $(document).ready(function(){
 											  });
 											
 											url = "index.php";
-											//$(location).attr('href',url);
+											$(location).attr('href',url);
 											
 									}
 							});

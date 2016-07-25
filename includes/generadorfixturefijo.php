@@ -228,23 +228,26 @@ if ((mysql_num_rows($equipo)%2) == 1) {
 	}
 }
 
-//var_dump($arEquipos);
-
+//die(var_dump($arEquiposId));
+//die(var_dump($cantidadEquipos));
 
 
 $columnas	= $cantidadEquipos - 1;
 $filas		= $cantidadEquipos / 2;
 
+//die(var_dump($columnas."-".$filas));
+
 $fixture = array();
 
 $fixtureNum = array();
 
-if (mysql_num_rows($res)<1) {
+//if (mysql_num_rows($res)<1) {
 
 $k = $cantidadEquipos;
 $m = 2;
 
 for ($i=1;$i<=$filas;$i++) {
+	echo $i;
 	$m = $i + 1;
 
 	if ($i >2) {
@@ -285,148 +288,120 @@ for ($i=1;$i<=$filas;$i++) {
 		
 		
 	}	
-}
+//}
 
 }
-
+//die(var_dump($fixture));
 return $fixture;
 
 }
 
-function buscarHorario($idzona,$idtorneo,$idtipotorneo,$idturnousado,$idtge,$cancha,$fecha) {
-	
-	if ($idturnousado == '') {
-		$sql = "select 
-					e.nombre,e.idequipo,tep.valor,h.idhorario,h.horario
-				from
-					dbequipos e
-						inner join
-					dbtorneoge tge ON tge.refequipo = e.idequipo
-						inner join
-					dbgrupos g ON g.idgrupo = tge.refgrupo
-						inner join
-					dbtorneos t ON t.idtorneo = tge.reftorneo
-						inner join
-					tbtipotorneo tp ON tp.idtipotorneo = t.reftipotorneo
-						inner join
-					dbturnosequiposprioridad tep ON tep.reftorneoge = tge.IdTorneoGE
-						inner join
-					tbhorarios h ON h.idhorario = tep.refturno
 
-				where
-					t.idtorneo = ".$idtorneo." and t.activo = 1 and tge.IdTorneoGE in (".$idtge.")
-						and tge.refgrupo = ".$idzona." and h.idhorario not in (select distinct
-																		h.idhorario
-																	from
-																		dbequipos e
-																			inner join
-																		dbtorneoge tge ON tge.refequipo = e.idequipo
-																			inner join
-																		dbgrupos g ON g.idgrupo = tge.refgrupo
-																			inner join
-																		dbtorneos t ON t.idtorneo = tge.reftorneo
-																			inner join
-																		tbtipotorneo tp ON tp.idtipotorneo = t.reftipotorneo
-																			inner join
-																		dbfixture fix ON fix.reftorneoge_a = tge.idtorneoge
-																			or fix.reftorneoge_b = tge.idtorneoge
-																			inner join
-																		tbhorarios h ON h.horario = fix.hora
-																			and h.reftipotorneo = ".$idtipotorneo."
-																	where
-																		t.idtorneo = ".$idtorneo." and t.activo = 1
-																			and fix.cancha = '".$cancha."'
-																			and fix.reffecha = ".$fecha.")
-				order by tge.prioridad desc,tep.valor desc,h.idhorario
-				limit 1";	
-	} else {
-		$sql = "select 
-					e.nombre,e.idequipo,tep.valor,h.idhorario,h.horario
-				from
-					dbequipos e
-						inner join
-					dbtorneoge tge ON tge.refequipo = e.idequipo
-						inner join
-					dbgrupos g ON g.idgrupo = tge.refgrupo
-						inner join
-					dbtorneos t ON t.idtorneo = tge.reftorneo
-						inner join
-					tbtipotorneo tp ON tp.idtipotorneo = t.reftipotorneo
-						inner join
-					dbturnosequiposprioridad tep ON tep.reftorneoge = tge.IdTorneoGE
-						inner join
-					tbhorarios h ON h.idhorario = tep.refturno
-				where
-					t.idtorneo = ".$idtorneo." and t.activo = 1 and tge.idtorneoge in (".$idtge.")
-						and tge.refgrupo = ".$idzona." and (h.idhorario not in (".$idturnousado.") and h.idhorario not in (select distinct
-																		h.idhorario
-																	from
-																		dbequipos e
-																			inner join
-																		dbtorneoge tge ON tge.refequipo = e.idequipo
-																			inner join
-																		dbgrupos g ON g.idgrupo = tge.refgrupo
-																			inner join
-																		dbtorneos t ON t.idtorneo = tge.reftorneo
-																			inner join
-																		tbtipotorneo tp ON tp.idtipotorneo = t.reftipotorneo
-																			inner join
-																		dbfixture fix ON fix.reftorneoge_a = tge.idtorneoge
-																			or fix.reftorneoge_b = tge.idtorneoge
-																			inner join
-																		tbhorarios h ON h.horario = fix.hora
-																			and h.reftipotorneo = ".$idtipotorneo."
-																	where
-																		t.idtorneo = ".$idtorneo." and t.activo = 1
-																			and fix.cancha = '".$cancha."'
-																			and fix.reffecha = ".$fecha."))
-			order by tge.prioridad desc,tep.valor desc,h.idhorario
-			limit 1";	
+
+function Generar360($idtorneo, $idZona) {
+	$equipo = $this->traerEquipos($idtorneo, $idZona);
+
+	$res = $this->TraerTodoFixture($idtorneo,$idZona);
+
+$cadFixture = '';
+$arEquipos = array();
+$arEquiposId = array();
+
+if ((mysql_num_rows($equipo)%2) == 1) {
+	$cantidadEquipos = mysql_num_rows($equipo)+1;
+	for ($p=0;$p<mysql_num_rows($equipo);$p++) {
+		$arEquipos[$p] = mysql_result($equipo,$p,0);
+		$arEquiposId[$p] = mysql_result($equipo,$p,1);
 	}
-	//echo $sql;
-	//die();
-	$res = $this-> query($sql,0);
-	if (mysql_num_rows($res) >0) {
-		return array('id'=>mysql_result($res,0,3),'horario'=>mysql_result($res,0,4));	
+	$arEquipos[$cantidadEquipos-1] = "borrar";
+	$arEquiposId[$cantidadEquipos-1] = 0;
+} else {
+	$cantidadEquipos = mysql_num_rows($equipo);
+	for ($p=0;$p<mysql_num_rows($equipo);$p++) {
+		$arEquipos[$p] = mysql_result($equipo,$p,0);
+		$arEquiposId[$p] = mysql_result($equipo,$p,1);
 	}
-	return array('id'=>0,'horario'=>0);
 }
 
-function existeTurno($idzona,$idtorneo,$idtipotorneo,$cancha,$fecha) {
-	$sql = "select 
-				distinct h.idhorario, h.horario
-			from
-				dbequipos e
-					inner join
-				dbtorneoge tge ON tge.refequipo = e.idequipo
-					inner join
-				dbgrupos g ON g.idgrupo = tge.refgrupo
-					inner join
-				dbtorneos t ON t.idtorneo = tge.reftorneo
-					inner join
-				tbtipotorneo tp ON tp.idtipotorneo = t.reftipotorneo
-					inner join
-				dbfixture fix ON fix.reftorneoge_a = tge.idtorneoge
-					or fix.reftorneoge_b = tge.idtorneoge
-					inner join
-				tbhorarios h on h.horario = fix.hora and h.reftipotorneo = 1
-			where
-				t.idtorneo = ".$idtorneo." and t.activo = 1
-					and fix.cancha = '".$cancha."'
-					and fix.reffecha = ".$fecha;
-	$res = $this-> query($sql,0);
-	
-	$cad = '';
-	if (mysql_num_rows($res) >0) {
-		while ($row = mysql_fetch_array($res)) {
-			$cad .= mysql_result($res,0,0).",";	
+//die(var_dump($arEquipos));
+//die(var_dump($cantidadEquipos));
+
+//die(var_dump($arEquipos));
+$columnas	= $cantidadEquipos - 1;
+$filas		= $cantidadEquipos / 2;
+
+//die(var_dump($columnas."-".$filas));
+
+$fixture = array();
+
+$fixtureNum = array();
+
+//if (mysql_num_rows($res)<1) {
+
+$k = $cantidadEquipos;
+$m = 1;
+
+
+//ok
+for ($i=1;$i<=$columnas;$i++) {
+
+
+	for ($j=1;$j<=$filas;$j++) {
+		$fixture[$i-1][$j-1] = $arEquipos[$m-1]."***".$arEquiposId[$m-1];
+		$fixtureNum[$i-1][$j-1] = $arEquiposId[$m-1];
+		
+		if ($m == ($cantidadEquipos-1)) {
+			$m = 0;	
 		}
-		return $cad;
+		
+		$m += 1;
 	}
-	return $cad;
+		
+		
+}	
+
+
+//ok
+for ($j=1;$j<=$columnas;$j++) {
+
+	$fixture[$j-1][0] .= "***".$arEquipos[$cantidadEquipos - 1]."***".$arEquiposId[$cantidadEquipos - 1];
+	$fixtureNum[$j-1][0] .= "***".$arEquiposId[$cantidadEquipos - 1];
+
 	
-	//return $sql;
 }
+
+	
+
+$m = $cantidadEquipos - 1;
+
+for ($i=1;$i<=$columnas;$i++) {
+
+
+	for ($j=2;$j<=$filas;$j++) {
+		$fixture[$i-1][$j-1] .= "***".$arEquipos[$m-1]."***".$arEquiposId[$m-1];
+		$fixtureNum[$i-1][$j-1] .= "***".$arEquiposId[$m-1];
+		
+		if ($m == 1) {
+			if (($cantidadEquipos % 2)==0) {
+				$m = $cantidadEquipos;	
+			} else {
+				$m = $cantidadEquipos - 1;	
+			}
+		}
+		
+		$m -= 1;
+		
+	}
+		
+		
+}	
+
+
+//die(var_dump($fixture));
+return $fixture;
+
+}
+
 
 function query($sql,$accion) {
 	

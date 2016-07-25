@@ -18,7 +18,7 @@ $serviciosHTML = new ServiciosHTML();
 
 $fecha = date('Y-m-d');
 
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Torneos",$_SESSION['refroll_predio'],($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Torneos",$_SESSION['refroll_predio'],($_SESSION['torneo_predio']),0,1,0);
 
 $resTorneoActual = $serviciosFunciones->TraerTorneosActivo($_SESSION['idtorneo_predio']);
 
