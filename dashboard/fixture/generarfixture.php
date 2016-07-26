@@ -120,7 +120,7 @@ if ((mysql_num_rows($resZonasEquipos) % 2)==0) {
 
 
 
-<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
+<title>Gesti&oacute;n: AIF</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 

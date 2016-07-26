@@ -37,7 +37,7 @@ $resTipoTorneos = $serviciosFunciones->traerTipoTorneo();
 
 
 
-<title>Gestión: Predio 98</title>
+<title>Gestión: AIF</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 

@@ -22,7 +22,7 @@ $serviciosEquipos 	= new ServiciosE();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Sedes",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Sedes",$_SESSION['refroll_predio'],$_SESSION['torneo_predio'],0,1,0);
 
 
 
@@ -77,7 +77,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 
-<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
+<title>Gesti&oacute;n: AIF</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 

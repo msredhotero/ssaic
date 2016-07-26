@@ -28,7 +28,7 @@ $id = $_GET['id'];
 
 $resGoleadores = $serviciosJugadores->traerGoleadoresPorId($id);
 
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Goleadores",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Goleadores",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']),0,1,0);
 
 
 $resEquipos = $serviciosEquipos->TraerEquipos();
@@ -67,7 +67,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 
-<title>Gestión: Predio 98</title>
+<title>Gestión: AIF</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 

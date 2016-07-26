@@ -33,7 +33,7 @@ if ($resLogin == '') {
 
 
 
-<title>Acceso Restringido: Predio98</title>
+<title>Acceso Restringido: SoftSport - Sistema de Gestión AIF</title>
 
 
 

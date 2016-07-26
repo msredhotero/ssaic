@@ -133,7 +133,7 @@ header('Location: generarfixture.php?idtorneo='.$_POST['idtorneo'].'&idzona='.$_
 
 
 
-<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
+<title>Gesti&oacute;n: AIF</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 

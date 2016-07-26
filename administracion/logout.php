@@ -19,7 +19,7 @@ session_destroy();
 
 
 
-<title>Predio 98</title>
+<title>Gestión: AIF</title>
 
 
 
@@ -109,7 +109,7 @@ session_destroy();
 <br>
 <h2>Acaba de salir del sistema. </h2>
 
-<h4>Si quiere volver al Inicio presione <a href="../login.php" style="color:#009; font-weight:bold;">AQUI</a></h4>
+<h4>Si quiere volver al Inicio presione <a href="../index.php" style="color:#009; font-weight:bold;">AQUI</a></h4>
 
 
 </div>

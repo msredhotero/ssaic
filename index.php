@@ -25,7 +25,7 @@ $resTipoTorneos = $servicios->traerTipoTorneo();
 
 
 
-<title>Acceso Restringido: SoftSport - Sistema de Padel</title>
+<title>Acceso Restringido: SoftSport - Sistema de Gestión AIF</title>
 
 
 

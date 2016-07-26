@@ -22,7 +22,7 @@ $resTipoTorneos = $servicios->traerTipoTorneo();
 
 
 
-<title>Acceso Restringido: AIF</title>
+<title>Acceso Restringido: SoftSport - Sistema de Gestión AIF</title>
 
 
 
