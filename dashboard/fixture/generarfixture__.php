@@ -35,6 +35,7 @@ $resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Fixture",$_SESSION['
 
 
 
+
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbfixture";
 
@@ -43,6 +44,15 @@ $lblreemplazo	= array("Zona-Equipo 1","Resultado 1","Zona-Equipo 2","Resultado 2
 
 $resZonasEquipos 	= $serviciosZonasEquipos->TraerEquiposZonasPorZonas($_GET['idzona']);
 $resZonasEquipos2 	= $serviciosZonasEquipos->TraerEquiposZonasPorZonas($_GET['idzona']);
+
+/*
+while ($rowAA = mysql_fetch_array($resZonasEquipos2)) {
+	$letra = $_POST['letra'.$rowAA[0]];
+
+	$serviciosFunciones->modificarLetra($letra,$rowAA[0]);
+	
+}
+*/
 
 $cadRef = '';
 while ($rowTT = mysql_fetch_array($resZonasEquipos)) {
@@ -71,9 +81,14 @@ while ($rowC = mysql_fetch_array($resCanchas)) {
 $resHorarios 	= $serviciosFunciones->TraerHorarios($_SESSION['idtorneo_predio']);
 
 $cadRef4 = '';
+if (mysql_num_rows($resHorarios)>0) {
+
 while ($rowH = mysql_fetch_array($resHorarios)) {
 	$cadRef4 = $cadRef4.'<option value="'.$rowH[0].'">'.$rowH[1].'</option>';
 	
+}
+} else {
+	$cadRef4 = $cadRef4.'<option value=""></option>';
 }
 
 
@@ -106,6 +121,10 @@ if ((mysql_num_rows($resZonasEquipos) % 2)==0) {
 } else {
 	$cantFechas = mysql_num_rows($resZonasEquipos);
 }
+
+$array = $Generar->devolverCantFilas($_GET['idtorneo'],$_GET['idzona']);
+
+$filas = $array["filas"] * $array["columnas"];
 //die(var_dump($fixtureGenerardo));
 ?>
 
@@ -114,13 +133,13 @@ if ((mysql_num_rows($resZonasEquipos) % 2)==0) {
 
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 
 
-<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
+<title>Gesti&oacute;n: Predio 98</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -845,7 +864,7 @@ padding-bottom: 10px;
 	</style>
     
    
-   <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
+  <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
       <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
       <script src="../../js/jquery.mousewheel.js"></script>
       <script src="../../js/perfect-scrollbar.js"></script>
@@ -922,58 +941,67 @@ padding-bottom: 10px;
         </div>
     	<div class="cuerpoBox">
     		<form class="form-inline formulario" role="form" method="post" action="finalizar.php">
-            <div class="row" style="margin-left:5px; margin-right:5px;">
+            <div class="row" style="margin-left:5px; margin-right:5px; min-width:800px;">
+            	<div class="form-group col-md-12">
+                	<label class="control-label">Seleccione si el tipo de campeonato es Ida o Ida/Vuelta: </label>
+                    <select id="idavuelta" name="idavuelta" class="form-control">
+                    	<option value="0">Ida</option>
+                        <option value="1">Ida - Vuelta
+                    </select>
+                    <bt>
+                    <hr>
+                </div>
     		<?php 
-			//die(var_dump($fixtureGenerardo));
+			//die(var_dump($fixtureGenerardo[0][0]));
 			$total = 1;
 			if (count($fixtureGenerardo)>0) {
 			for ($i=0;$i<$cantFechas;$i++) {
 			echo '
 
-						<h3 class="panel-title">Fecha '.($i + 1).'</h3>
+						<h3>Fecha '.($i + 1).'</h3>
 
-					  <div class="form-group col-md-4">
+					  <div class="form-group col-md-4 col-sm-4" style="border:1px solid #121212;">
 					  	<label>Equipo A</label>
 					  </div>
-					  <div class="form-group col-md-2">
+					  <div class="form-group col-md-2 col-sm-2" style="border:1px solid #121212;">
 					  	<label>Horario</label>
 					  </div>
-					  <div class="form-group col-md-2">
+					  <div class="form-group col-md-2 col-sm-2" style="border:1px solid #121212;">
 					  	<label>Cancha</label>
 					  </div>
-					  <div class="form-group col-md-4">
+					  <div class="form-group col-md-4 col-sm-4" style="border:1px solid #121212;">
 					  	<label>Equipo B</label>
 					  </div>';
-			foreach ($fixtureGenerardo as $item) {
-				$lstEquipos = explode("***",$item[$i]);
+			for ($k=0;$k<$array["filas"];$k++) {
+				$lstEquipos = explode("***",$fixtureGenerardo[$i][$k]);
 				
 				echo '
-					  	<div class="form-group col-md-4">
-						<select id="equipoa'.$total.'" name="equipoa'.$total.'" class="form-control">
+					  	<div class="form-group col-md-4 col-sm-4" style="border:1px solid #121212; padding:5px;">
+						<select id="equipoa'.$total.'" name="equipoa'.$total.'" class="form-control letraChica">
                                 
-                                <option value="'.$lstEquipos[2].'">'.$lstEquipos[0].'</option>
+                                <option value="'.$lstEquipos[1].'">'.$lstEquipos[0].'</option>
                                 '.$cadRef.'
                          </select>
 						 </div>
 						 
-						 <div class="form-group col-md-2">
-						<select id="horario'.$total.'" name="horario'.$total.'" class="form-control">
+						 <div class="form-group col-md-2 col-sm-2" style="border:1px solid #121212; padding:5px;">
+						<select id="horario'.$total.'" name="horario'.$total.'" class="form-control letraChica">
                                 
                                 '.$cadRef4.'    
                          </select>
 						 </div>
 						 
 						 
-						  <div class="form-group col-md-2">
-						<select id="cancha'.$total.'" name="cancha'.$total.'" class="form-control">
+						  <div class="form-group col-md-2 col-sm-2" style="border:1px solid #121212; padding:5px;">
+						<select id="cancha'.$total.'" name="cancha'.$total.'" class="form-control letraChica">
                                 '.$cadRef3.'
                          </select>
 						 </div>
 						 
 						 
-						 <div class="form-group col-md-4">
-						<select id="equipob'.$total.'" name="equipob'.$total.'" class="form-control">
-                                <option value="'.$lstEquipos[3].'">'.$lstEquipos[1].'</option>
+						 <div class="form-group col-md-4 col-sm-4" style="border:1px solid #121212; padding:5px;">
+						<select id="equipob'.$total.'" name="equipob'.$total.'" class="form-control letraChica">
+                                <option value="'.$lstEquipos[3].'">'.$lstEquipos[2].'</option>
                                 '.$cadRef.' 
                          </select>
 						 </div>';
@@ -982,15 +1010,17 @@ padding-bottom: 10px;
 			echo '
 				
 				
-				Fecha Juego '.($i + 1).' <input type="text" id="datepicker'.($i + 1).'" name="datepicker'.($i + 1).'" value="'.date('d/m/Y').'" />
+				Fecha Juego '.($i + 1).' <input type="text" class="form-control" id="datepicker'.($i + 1).'" name="datepicker'.($i + 1).'" value="'.date('d/m/Y').'" />
 				
 		
 					';
+				echo "<hr><br>";
 			}
 			echo '<input type="hidden" id="cantfechas" name="cantfechas" value="'.($i + 1).'" />';
 			echo '<input type="hidden" id="total" name="total" value="'.$total.'" />';
 			echo '<input type="hidden" id="idtorneo" name="idtorneo" value="'.$_GET['idtorneo'].'" />';
 			echo '<input type="hidden" id="idzona" name="idzona" value="'.$_GET['idzona'].'" />';
+	
 			} else {
 				echo '<h2>Ya fue Cargado el Fixture completo para este torneo';	
 			}
