@@ -168,7 +168,7 @@ $resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_pred
 
 <h3>Fixture</h3>
 
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Carga del Fixture</p>
         	
@@ -282,7 +282,7 @@ $resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_pred
     	</div>
     </div>
 
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Fixture Cargados</p>
         	

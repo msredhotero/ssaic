@@ -215,7 +215,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
     </div>
     
     
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Resultados</p>
         	
@@ -226,7 +226,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
         
     </div>
     
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Posiciones</p>
         	
@@ -237,7 +237,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
         
     </div>
     
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Goleadores</p>
         	
@@ -248,7 +248,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
         
     </div>
     
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Amarillas</p>
         	
@@ -260,7 +260,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
     </div>
     
     
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">FairPlay</p>
         	
@@ -272,7 +272,7 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
     </div>
     
     
-    <div class="boxInfoLargo">
+    <div class="boxInfoLargo tile-stats tile-white stat-tile">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Suspendidos</p>
         	
